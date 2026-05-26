@@ -7,11 +7,12 @@ function Header() {
 
       <nav className="header-nav">
         <div className="nav-item">
-          Movies
+          <a href="#movies" className="nav-main-link">Movies</a>
+
           <div className="submenu">
-            <span>Now Showing</span>
-            <span>Coming Soon</span>
-            <span>Premieres</span>
+            <a href="#now-showing">Now Showing</a>
+            <a href="#coming-soon">Coming Soon</a>
+            <a href="#premieres">Premieres</a>
           </div>
         </div>
 

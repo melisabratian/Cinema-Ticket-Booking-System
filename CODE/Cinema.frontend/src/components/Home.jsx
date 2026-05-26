@@ -1,4 +1,9 @@
+import { useState } from "react";
+import TicketBookingModal from "./TicketBookingModal";
+
 function Home() {
+  const [showTicketModal, setShowTicketModal] = useState(false);
+
   return (
     <section className="home-video-section">
       <video
@@ -22,11 +27,20 @@ function Home() {
           </p>
 
           <div className="home-actions">
-            <button className="primary-btn">View Movies</button>
-            <button className="secondary-btn">Book Tickets</button>
+            <a href="#movies" className="primary-btn">
+              View Movies
+            </a>
+            <button className="secondary-btn" onClick={() => setShowTicketModal(true)}>
+              Book Tickets
+            </button>
           </div>
         </div>
       </div>
+
+      {showTicketModal && (
+        <TicketBookingModal onClose={() => setShowTicketModal(false)} />
+      )}
+
     </section>
   );
 }
