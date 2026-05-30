@@ -16,15 +16,20 @@ router.get("/", async (req, res) => {
         Reservations.Email,
         Reservations.Phone,
         Reservations.NumberOfTickets,
+        Reservations.ScreeningDate,
         Reservations.ReservationDate,
         Reservations.TotalPrice
       FROM Reservations
       INNER JOIN Movies ON Reservations.MovieId = Movies.Id
+      ORDER BY Reservations.ReservationDate DESC
     `);
 
     res.json(result.recordset);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching reservations", error: err.message });
+    res.status(500).json({
+      message: "Error fetching reservations",
+      error: err.message
+    });
   }
 });
 
@@ -36,56 +41,107 @@ router.post("/", async (req, res) => {
       ClientName,
       Email,
       Phone,
-      NumberOfTickets
+      NumberOfTickets,
+      ScreeningDate
     } = req.body;
+
+    if (!MovieId || !ClientName || !Email || !NumberOfTickets || !ScreeningDate) {
+      return res.status(400).json({
+        message: "Movie, name, email, number of tickets and screening date are required."
+      });
+    }
+
+    const tickets = Number(NumberOfTickets);
+
+    if (tickets <= 0) {
+      return res.status(400).json({
+        message: "Number of tickets must be greater than 0."
+      });
+    }
+
+    const selectedDate = new Date(ScreeningDate);
+    const today = new Date();
+    const maxDate = new Date();
+
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+    maxDate.setHours(0, 0, 0, 0);
+    maxDate.setDate(today.getDate() + 7);
+
+    if (selectedDate < today || selectedDate > maxDate) {
+      return res.status(400).json({
+        message: "Tickets can only be booked from today up to the next 7 days."
+      });
+    }
 
     const pool = await poolPromise;
 
     const movieResult = await pool
       .request()
       .input("MovieId", sql.Int, MovieId)
-      .query("SELECT TicketPrice, AvailableSeats FROM Movies WHERE Id = @MovieId");
+      .query(`
+        SELECT Title, TicketPrice, AvailableSeats, Status
+        FROM Movies
+        WHERE Id = @MovieId
+      `);
 
     if (movieResult.recordset.length === 0) {
-      return res.status(404).json({ message: "Movie not found" });
+      return res.status(404).json({
+        message: "Movie not found."
+      });
     }
 
     const movie = movieResult.recordset[0];
 
-    if (movie.AvailableSeats < NumberOfTickets) {
-      return res.status(400).json({ message: "Not enough available seats" });
+    if (movie.Status === "Coming Soon") {
+      return res.status(400).json({
+        message: "Tickets are not available yet for coming soon movies."
+      });
     }
 
-    const totalPrice = movie.TicketPrice * NumberOfTickets;
+    if (movie.AvailableSeats < tickets) {
+      return res.status(400).json({
+        message: "Not enough available seats."
+      });
+    }
+
+    const totalPrice = movie.TicketPrice * tickets;
 
     await pool
       .request()
       .input("MovieId", sql.Int, MovieId)
       .input("ClientName", sql.NVarChar, ClientName)
       .input("Email", sql.NVarChar, Email)
-      .input("Phone", sql.NVarChar, Phone)
-      .input("NumberOfTickets", sql.Int, NumberOfTickets)
+      .input("Phone", sql.NVarChar, Phone || "")
+      .input("NumberOfTickets", sql.Int, tickets)
+      .input("ScreeningDate", sql.Date, ScreeningDate)
       .input("TotalPrice", sql.Decimal(10, 2), totalPrice)
       .query(`
         INSERT INTO Reservations
-        (MovieId, ClientName, Email, Phone, NumberOfTickets, TotalPrice)
+        (MovieId, ClientName, Email, Phone, NumberOfTickets, ScreeningDate, TotalPrice)
         VALUES
-        (@MovieId, @ClientName, @Email, @Phone, @NumberOfTickets, @TotalPrice)
+        (@MovieId, @ClientName, @Email, @Phone, @NumberOfTickets, @ScreeningDate, @TotalPrice)
       `);
 
     await pool
       .request()
       .input("MovieId", sql.Int, MovieId)
-      .input("NumberOfTickets", sql.Int, NumberOfTickets)
+      .input("NumberOfTickets", sql.Int, tickets)
       .query(`
         UPDATE Movies
         SET AvailableSeats = AvailableSeats - @NumberOfTickets
         WHERE Id = @MovieId
       `);
 
-    res.status(201).json({ message: "Reservation created successfully", totalPrice });
+    res.status(201).json({
+      message: `Reservation completed successfully. Your online ticket for ${movie.Title} was sent to ${Email}.`,
+      totalPrice
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error creating reservation", error: err.message });
+    res.status(500).json({
+      message: "Error creating reservation",
+      error: err.message
+    });
   }
 });
 
@@ -97,10 +153,16 @@ router.delete("/:id", async (req, res) => {
     const reservationResult = await pool
       .request()
       .input("Id", sql.Int, req.params.id)
-      .query("SELECT MovieId, NumberOfTickets FROM Reservations WHERE Id = @Id");
+      .query(`
+        SELECT MovieId, NumberOfTickets
+        FROM Reservations
+        WHERE Id = @Id
+      `);
 
     if (reservationResult.recordset.length === 0) {
-      return res.status(404).json({ message: "Reservation not found" });
+      return res.status(404).json({
+        message: "Reservation not found."
+      });
     }
 
     const reservation = reservationResult.recordset[0];
@@ -120,9 +182,14 @@ router.delete("/:id", async (req, res) => {
         WHERE Id = @MovieId
       `);
 
-    res.json({ message: "Reservation deleted successfully" });
+    res.json({
+      message: "Reservation deleted successfully."
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error deleting reservation", error: err.message });
+    res.status(500).json({
+      message: "Error deleting reservation",
+      error: err.message
+    });
   }
 });
 

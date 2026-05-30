@@ -2,7 +2,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-brand">
-        <h3>LUMIÈRE CINEMA</h3>
+        <h3>AMC CINEMA</h3>
         <p>
           A client-server cinema ticket booking application developed for the
           Data Transmission project.
@@ -26,7 +26,7 @@ function Footer() {
       <div className="footer-column">
         <h4>Contact</h4>
         <p>Cluj-Napoca, Romania</p>
-        <p>support@lumierecinema.ro</p>
+        <p>support@amccinema.ro</p>
       </div>
     </footer>
   );
