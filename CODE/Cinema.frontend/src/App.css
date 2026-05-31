@@ -744,30 +744,58 @@ td {
   width: 100%;
   background: #000000;
   border-top: 1px solid #1f1f1f;
-  padding: 44px 70px;
+  padding: 44px 70px 26px;
+  display: block;
+}
+
+.footer-top {
+  width: 100%;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.2fr;
-  gap: 34px;
+  grid-template-columns: 2fr 1fr 1.2fr;
+  gap: 46px;
+  align-items: start;
+}
+
+.footer-brand,
+.footer-column {
+  display: block;
 }
 
 .footer h3 {
   color: #ffffff;
   font-size: 28px;
-  margin: 0 0 10px;
+  margin: 0 0 14px;
 }
 
 .footer h4 {
   color: #ffffff;
-  margin: 0 0 12px;
+  font-size: 18px;
+  margin: 0 0 14px;
 }
 
 .footer p {
   color: #9ca3af;
   margin: 7px 0;
+  line-height: 1.6;
 }
 
-.footer p:hover {
-  color: #dc2626;
+.footer-bottom {
+  width: 100%;
+  border-top: 1px solid #1f1f1f;
+  margin-top: 34px;
+  padding-top: 18px;
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: #9ca3af;
+  font-size: 14px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-bottom p:hover {
+  color: #ffffff;
 }
 
 /* TICKETS - 3 EQUAL BOXES */
@@ -1111,6 +1139,151 @@ td {
   background: #dc2626;
 }
 
+/* ADMIN TABS */
+
+.admin-tabs {
+  max-width: 1180px;
+  margin: 0 auto 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 12px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.admin-tabs .admin-tab {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: #050505 !important;
+  color: #ffffff !important;
+  padding: 13px 24px !important;
+  border-radius: 999px !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  transition: 0.25s ease !important;
+  letter-spacing: 0.2px;
+  appearance: none;
+}
+
+.admin-tabs .admin-tab:hover {
+  border-color: rgba(220, 38, 38, 0.65) !important;
+  background: rgba(220, 38, 38, 0.15) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.admin-tabs .admin-tab.active {
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(220, 38, 38, 0.45);
+}
+
+.admin-tabs .admin-tab.active:hover {
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.admin-delete-btn {
+  border: none;
+  background: #dc2626;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-delete-btn:hover {
+  background: #b91c1c;
+}
+
+/* BOOKING CONFIRMATION */
+
+.booking-confirmation-card {
+  margin-top: 10px;
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  border-radius: 18px;
+  padding: 24px;
+  text-align: center;
+}
+
+.booking-confirmation-card h3 {
+  margin: 0 0 14px;
+  color: #ffffff;
+  font-size: 28px;
+}
+
+.booking-confirmation-card p {
+  margin: 8px 0;
+  color: #ffffff;
+}
+
+.booking-confirmation-card strong {
+  color: #ffffff;
+}
+
+.booking-confirmation-details {
+  margin: 18px 0;
+  background: #050505;
+  border: 1px solid #222222;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+/* ADMIN ADD MOVIE FORM */
+
+.admin-movie-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.admin-movie-form input,
+.admin-movie-form select,
+.admin-movie-form textarea {
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1px solid #333333;
+  background: #050505;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.admin-movie-form textarea {
+  grid-column: span 2;
+  min-height: 110px;
+  resize: vertical;
+}
+
+.admin-movie-form input:focus,
+.admin-movie-form select:focus,
+.admin-movie-form textarea:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
+}
+
+.admin-movie-form .error-message,
+.admin-movie-form .success-message,
+.admin-movie-form button {
+  grid-column: span 2;
+}
+
+/* CONTACT SUCCESS MESSAGE WHITE */
+
+.contact-form .success-message {
+  color: #ffffff !important;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 1200px) {
@@ -1251,156 +1424,11 @@ td {
   .screen-area {
     width: 95%;
   }
-}
 
-/* CONTACT SUCCESS MESSAGE WHITE */
+  .admin-tabs {
+    border-radius: 24px;
+  }
 
-.contact-form .success-message {
-  color: #ffffff !important;
-}
-
-/* ADMIN DASHBOARD TABS - CINEMA STYLE */
-
-.admin-tabs {
-  max-width: 1180px;
-  margin: 0 auto 34px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  background: #101010;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
-  padding: 12px;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
-}
-
-.admin-tabs .admin-tab {
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  background: #050505 !important;
-  color: #ffffff !important;
-  padding: 13px 24px !important;
-  border-radius: 999px !important;
-  font-size: 15px !important;
-  font-weight: 900 !important;
-  cursor: pointer !important;
-  transition: 0.25s ease !important;
-  letter-spacing: 0.2px;
-  appearance: none;
-}
-
-.admin-tabs .admin-tab:hover {
-  border-color: rgba(220, 38, 38, 0.65) !important;
-  background: rgba(220, 38, 38, 0.15) !important;
-  color: #ffffff !important;
-  transform: translateY(-2px);
-}
-
-.admin-tabs .admin-tab.active {
-  background: #dc2626 !important;
-  border-color: #dc2626 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 18px rgba(220, 38, 38, 0.45);
-}
-
-.admin-tabs .admin-tab.active:hover {
-  background: #dc2626 !important;
-  border-color: #dc2626 !important;
-  color: #ffffff !important;
-}
-
-/* ADMIN DELETE BUTTON */
-
-.admin-delete-btn {
-  border: none;
-  background: #dc2626;
-  color: #ffffff;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.admin-delete-btn:hover {
-  background: #b91c1c;
-}
-
-/* BOOKING CONFIRMATION */
-
-.booking-confirmation-card {
-  margin-top: 10px;
-  background: rgba(220, 38, 38, 0.12);
-  border: 1px solid rgba(220, 38, 38, 0.45);
-  border-radius: 18px;
-  padding: 24px;
-  text-align: center;
-}
-
-.booking-confirmation-card h3 {
-  margin: 0 0 14px;
-  color: #ffffff;
-  font-size: 28px;
-}
-
-.booking-confirmation-card p {
-  margin: 8px 0;
-  color: #ffffff;
-}
-
-.booking-confirmation-card strong {
-  color: #ffffff;
-}
-
-.booking-confirmation-details {
-  margin: 18px 0;
-  background: #050505;
-  border: 1px solid #222222;
-  border-radius: 16px;
-  padding: 16px;
-}
-
-/* ADMIN ADD MOVIE FORM */
-
-.admin-movie-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-
-.admin-movie-form input,
-.admin-movie-form select,
-.admin-movie-form textarea {
-  width: 100%;
-  padding: 13px 15px;
-  border-radius: 12px;
-  border: 1px solid #333333;
-  background: #050505;
-  color: #ffffff;
-  font-size: 15px;
-}
-
-.admin-movie-form textarea {
-  grid-column: span 2;
-  min-height: 110px;
-  resize: vertical;
-}
-
-.admin-movie-form input:focus,
-.admin-movie-form select:focus,
-.admin-movie-form textarea:focus {
-  outline: none;
-  border-color: #dc2626;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
-}
-
-.admin-movie-form .error-message,
-.admin-movie-form .success-message,
-.admin-movie-form button {
-  grid-column: span 2;
-}
-
-@media (max-width: 650px) {
   .admin-movie-form {
     grid-template-columns: 1fr;
   }
@@ -1411,4 +1439,348 @@ td {
   .admin-movie-form button {
     grid-column: span 1;
   }
+
+  /* DISABLED PAST TIME BUTTONS */
+
+.booking-modal .time-buttons .time-option:disabled {
+  background: #1f1f1f !important;
+  color: #777777 !important;
+  border-color: #333333 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  opacity: 0.55;
+}
+
+.booking-modal .time-buttons .time-option:disabled:hover {
+  background: #1f1f1f !important;
+  color: #777777 !important;
+  border-color: #333333 !important;
+  transform: none !important;
+}
+/* FINAL FOOTER FIX */
+
+.footer {
+  width: 100% !important;
+  background: #000000 !important;
+  border-top: 1px solid #1f1f1f !important;
+  padding: 44px 70px 26px !important;
+  display: block !important;
+}
+
+.footer-top {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.2fr;
+  gap: 46px;
+  align-items: start;
+}
+
+.footer-brand,
+.footer-column {
+  display: block;
+}
+
+.footer h3 {
+  color: #ffffff;
+  font-size: 28px;
+  margin: 0 0 14px;
+}
+
+.footer h4 {
+  color: #ffffff;
+  font-size: 18px;
+  margin: 0 0 14px;
+}
+
+.footer p {
+  color: #9ca3af;
+  margin: 7px 0;
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  width: 100%;
+  border-top: 1px solid #1f1f1f;
+  margin-top: 34px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  clear: both;
+}
+
+.footer-bottom p {
+  color: #9ca3af;
+  font-size: 14px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-bottom p:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .footer {
+    padding: 36px 28px 24px !important;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer-bottom {
+    margin-top: 24px;
+  }
+}
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+  .info-grid,
+  .contact-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .header {
+    padding: 0 28px;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .video-overlay {
+    padding: 50px 30px;
+  }
+
+  .home-video-content h1 {
+    font-size: 42px;
+  }
+
+  .info-section,
+  .movies-section,
+  .admin-section {
+    padding: 70px 30px;
+  }
+
+  .tickets-layout {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+
+  .ticket-panel {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+@media (max-width: 650px) {
+  .header {
+    height: auto;
+    padding: 18px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .logo-image {
+    height: 62px;
+  }
+
+  .home-video-section {
+    min-height: 560px;
+  }
+
+  .video-overlay {
+    min-height: 560px;
+    padding: 50px 24px;
+  }
+
+  .home-video-content h1 {
+    font-size: 34px;
+  }
+
+  .home-video-content p {
+    font-size: 16px;
+  }
+
+  .home-actions {
+    flex-direction: column;
+  }
+
+  .info-section,
+  .movies-section,
+  .admin-section {
+    padding: 60px 22px;
+  }
+
+  .section-heading h2,
+  .movies-section h2 {
+    font-size: 34px;
+  }
+
+  .movies-grid,
+  .info-grid,
+  .contact-layout,
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-poster-wrapper {
+    height: 420px;
+  }
+
+  .movie-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .movie-bottom button {
+    width: 100%;
+  }
+
+  .seat-selection-modal {
+    padding: 26px 18px;
+  }
+
+  .seat {
+    width: 34px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .seat-row {
+    gap: 8px;
+  }
+
+  .seat-row-items {
+    gap: 6px;
+  }
+
+  .screen-area {
+    width: 95%;
+  }
+
+  .admin-tabs {
+    border-radius: 24px;
+  }
+
+  .admin-movie-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-movie-form textarea,
+  .admin-movie-form .error-message,
+  .admin-movie-form .success-message,
+  .admin-movie-form button {
+    grid-column: span 1;
+  }
+}
+
+/* DISABLED PAST TIME BUTTONS */
+
+.booking-modal .time-buttons .time-option:disabled {
+  background: #1f1f1f !important;
+  color: #777777 !important;
+  border-color: #333333 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  opacity: 0.55;
+}
+
+.booking-modal .time-buttons .time-option:disabled:hover {
+  background: #1f1f1f !important;
+  color: #777777 !important;
+  border-color: #333333 !important;
+  transform: none !important;
+}
+
+/* FINAL FOOTER FIX */
+
+.footer {
+  width: 100% !important;
+  background: #000000 !important;
+  border-top: 1px solid #1f1f1f !important;
+  padding: 44px 70px 26px !important;
+  display: block !important;
+}
+
+.footer-top {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.2fr;
+  gap: 46px;
+  align-items: start;
+}
+
+.footer-brand,
+.footer-column {
+  display: block;
+}
+
+.footer h3 {
+  color: #ffffff;
+  font-size: 28px;
+  margin: 0 0 14px;
+}
+
+.footer h4 {
+  color: #ffffff;
+  font-size: 18px;
+  margin: 0 0 14px;
+}
+
+.footer p {
+  color: #9ca3af;
+  margin: 7px 0;
+  line-height: 1.6;
+}
+
+.footer p:hover {
+  color: #9ca3af;
+}
+
+.footer-bottom {
+  width: 100%;
+  border-top: 1px solid #1f1f1f;
+  margin-top: 34px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  clear: both;
+}
+
+.footer-bottom p {
+  color: #9ca3af;
+  font-size: 14px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-bottom p:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .footer {
+    padding: 36px 28px 24px !important;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer-bottom {
+    margin-top: 24px;
+  }
+}
 }

@@ -1,4 +1,43 @@
-// CREATE movie + screenings
+const express = require("express");
+const router = express.Router();
+const { sql, poolPromise } = require("../db");
+
+// GET all movies
+router.get("/", async (req, res) => {
+  try {
+    const pool = await poolPromise;
+
+    const result = await pool.request().query(`
+      SELECT 
+        Id,
+        Title,
+        Genre,
+        Description,
+        DurationMinutes,
+        AgeRating,
+        ReleaseYear,
+        Language,
+        TicketPrice,
+        ImageUrl,
+        AvailableSeats,
+        ShowTime,
+        HallName,
+        Status
+      FROM dbo.Movies
+      ORDER BY Id DESC
+    `);
+
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Error fetching movies:", err);
+
+    res.status(500).json({
+      message: "Error fetching movies",
+      error: err.message
+    });
+  }
+});
+
 router.post("/", async (req, res) => {
   const pool = await poolPromise;
   const transaction = new sql.Transaction(pool);
@@ -163,3 +202,5 @@ router.post("/", async (req, res) => {
     });
   }
 });
+
+module.exports = router;

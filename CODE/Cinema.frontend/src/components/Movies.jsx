@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import BookingModal from "./BookingModal";
 
-function Movies({ refreshKey, onBooked }) {
+function Movies({ refreshKey, onBooked, onMovieBook }) {
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -52,12 +50,9 @@ function Movies({ refreshKey, onBooked }) {
     return status === "coming soon";
   }
 
-  function handleBookingCompleted() {
-    setSelectedMovie(null);
-    loadMovies();
-
-    if (onBooked) {
-      onBooked();
+  function handleMovieBookClick(movie) {
+    if (onMovieBook) {
+      onMovieBook(movie);
     }
   }
 
@@ -129,7 +124,7 @@ function Movies({ refreshKey, onBooked }) {
                     Sold Out
                   </button>
                 ) : (
-                  <button onClick={() => setSelectedMovie(movie)}>
+                  <button onClick={() => handleMovieBookClick(movie)}>
                     Book Now
                   </button>
                 )}
@@ -146,8 +141,7 @@ function Movies({ refreshKey, onBooked }) {
       <h2>Movies</h2>
 
       <p className="movies-subtitle">
-        Explore all movies from the database. Each booking updates the number of
-        available seats.
+          Discover the latest movies, upcoming releases and special premieres. Choose your favorite film and reserve your seat for the perfect cinema experience.
       </p>
 
       {loading && <p className="loading-text">Loading movies...</p>}
@@ -171,15 +165,6 @@ function Movies({ refreshKey, onBooked }) {
             {renderMovies(premieres)}
           </div>
         </>
-      )}
-
-      {selectedMovie && (
-        <BookingModal
-          movie={selectedMovie}
-          onClose={() => setSelectedMovie(null)}
-          onBooked={handleBookingCompleted}
-          onReservationSuccess={handleBookingCompleted}
-        />
       )}
     </section>
   );

@@ -90,13 +90,13 @@ function Contact() {
         <div className="contact-card">
           <h3>Cinema location</h3>
           <p>Cluj-Napoca Central, Romania</p>
-          <p>Program: Monday - Sunday, 10:00 - 23:00</p>
+          <p>Program: Monday - Sunday, 15:00 - 24:00</p>
         </div>
 
         <div className="contact-card">
           <h3>Contact details</h3>
-          <p>Email: support@lumierecinema.ro</p>
-          <p>Phone: +40 700 000 000</p>
+          <p>Email: support@amccinema.ro</p>
+          <p>Phone: +40 374 132 001</p>
         </div>
 
         <form className="contact-form" onSubmit={handleSubmit}>

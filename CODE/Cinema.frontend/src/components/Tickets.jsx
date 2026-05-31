@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SeatSelectionModal from "./SeatSelectionModal";
 
-function Tickets() {
+function Tickets({ movieToBook, onMovieBookHandled, onBooked }) {
   const [screenings, setScreenings] = useState([]);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showSeatModal, setShowSeatModal] = useState(false);
@@ -37,24 +37,42 @@ function Tickets() {
   const minDateValue = formatDateForInput(today);
   const maxDateValue = formatDateForInput(maxDate);
 
-  useEffect(() => {
-    async function loadScreenings() {
-      try {
-        const response = await fetch("http://localhost:4000/screenings");
+  async function loadScreenings() {
+    try {
+      const response = await fetch("http://localhost:4000/screenings");
 
-        if (!response.ok) {
-          throw new Error("Failed to load screenings");
-        }
-
-        const data = await response.json();
-        setScreenings(data);
-      } catch (error) {
-        console.error("Error loading screenings:", error);
+      if (!response.ok) {
+        throw new Error("Failed to load screenings");
       }
-    }
 
+      const data = await response.json();
+      setScreenings(data);
+    } catch (error) {
+      console.error("Error loading screenings:", error);
+    }
+  }
+
+  useEffect(() => {
     loadScreenings();
   }, []);
+
+  useEffect(() => {
+    if (!movieToBook || screenings.length === 0) {
+      return;
+    }
+
+    const movieId = movieToBook.Id || movieToBook.MovieId;
+
+    setSelectedMovieId(String(movieId));
+    setSelectedDate("");
+    setSelectedTime("");
+    setErrorMessage("");
+    setShowBookingForm(true);
+
+    if (onMovieBookHandled) {
+      onMovieBookHandled();
+    }
+  }, [movieToBook, screenings, onMovieBookHandled]);
 
   const uniqueMovies = screenings.reduce((movies, screening) => {
     const alreadyExists = movies.some(
@@ -91,6 +109,26 @@ function Tickets() {
     return /^[0-9+\s()-]{7,15}$/.test(phone);
   }
 
+  function isPastTime(time) {
+    if (!selectedDate) {
+      return false;
+    }
+
+    const todayValue = formatDateForInput(new Date());
+
+    if (selectedDate !== todayValue) {
+      return false;
+    }
+
+    const now = new Date();
+    const [hours, minutes] = time.split(":").map(Number);
+
+    const selectedDateTime = new Date();
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+
+    return selectedDateTime <= now;
+  }
+
   function handleContinue(event) {
     event.preventDefault();
 
@@ -106,6 +144,13 @@ function Tickets() {
 
     if (!selectedTime) {
       setErrorMessage("Please select a screening time.");
+      return;
+    }
+
+    if (isPastTime(selectedTime)) {
+      setErrorMessage(
+        "This screening time has already passed. Please select another time."
+      );
       return;
     }
 
@@ -151,6 +196,17 @@ function Tickets() {
   function handleCloseForm() {
     setShowBookingForm(false);
     setErrorMessage("");
+  }
+
+  function handleCloseSeatModal() {
+    setShowSeatModal(false);
+    setSelectedScreening(null);
+
+    if (onBooked) {
+      onBooked();
+    }
+
+    loadScreenings();
   }
 
   return (
@@ -247,20 +303,31 @@ function Tickets() {
                 <p className="booking-field-label">Select time</p>
 
                 <div className="time-buttons">
-                  {availableTimes.map((time) => (
-                    <button
-                      key={time}
-                      type="button"
-                      className="time-option"
-                      data-selected={selectedTime === time ? "true" : "false"}
-                      onClick={() => {
-                        setSelectedTime(time);
-                        setErrorMessage("");
-                      }}
-                    >
-                      {time}
-                    </button>
-                  ))}
+                  {availableTimes.map((time) => {
+                    const disabled = isPastTime(time);
+
+                    return (
+                      <button
+                        key={time}
+                        type="button"
+                        className="time-option"
+                        data-selected={
+                          selectedTime === time ? "true" : "false"
+                        }
+                        disabled={disabled}
+                        onClick={() => {
+                          if (disabled) {
+                            return;
+                          }
+
+                          setSelectedTime(time);
+                          setErrorMessage("");
+                        }}
+                      >
+                        {time}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -307,7 +374,7 @@ function Tickets() {
         <SeatSelectionModal
           screening={selectedScreening}
           clientData={formData}
-          onClose={() => setShowSeatModal(false)}
+          onClose={handleCloseSeatModal}
         />
       )}
     </section>

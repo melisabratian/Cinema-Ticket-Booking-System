@@ -15,9 +15,22 @@ function App() {
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [movieToBook, setMovieToBook] = useState(null);
 
   function refreshData() {
     setRefreshKey((value) => value + 1);
+  }
+
+  function handleMovieBook(movie) {
+    setMovieToBook(movie);
+
+    setTimeout(() => {
+      const ticketsSection = document.getElementById("tickets");
+
+      if (ticketsSection) {
+        ticketsSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   }
 
   function handleAdminLoginSuccess() {
@@ -46,8 +59,19 @@ function App() {
       />
 
       <Home />
-      <Movies refreshKey={refreshKey} onBooked={refreshData} />
-      <Tickets onBooked={refreshData} />
+
+      <Movies
+        refreshKey={refreshKey}
+        onBooked={refreshData}
+        onMovieBook={handleMovieBook}
+      />
+
+      <Tickets
+        onBooked={refreshData}
+        movieToBook={movieToBook}
+        onMovieBookHandled={() => setMovieToBook(null)}
+      />
+
       <Experience />
       <Offers />
       <Contact />
