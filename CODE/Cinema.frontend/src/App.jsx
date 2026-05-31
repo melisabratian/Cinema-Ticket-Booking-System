@@ -23,6 +23,14 @@ function App() {
   function handleAdminLoginSuccess() {
     setIsAdmin(true);
     setShowAdminLogin(false);
+
+    setTimeout(() => {
+      const adminSection = document.getElementById("admin");
+
+      if (adminSection) {
+        adminSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 150);
   }
 
   function handleAdminLogout() {

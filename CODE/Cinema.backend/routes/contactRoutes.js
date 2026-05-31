@@ -2,14 +2,46 @@ const express = require("express");
 const router = express.Router();
 const { sql, poolPromise } = require("../db");
 
-// POST contact message
+router.get("/", async (req, res) => {
+  try {
+    const pool = await poolPromise;
+
+    const result = await pool.request().query(`
+      SELECT 
+        Id,
+        FullName,
+        Email,
+        Subject,
+        Message,
+        CreatedAt
+      FROM dbo.ContactMessages
+      ORDER BY CreatedAt DESC
+    `);
+
+    res.json(result.recordset);
+  } catch (err) {
+    res.status(500).json({
+      message: "Error fetching contact messages",
+      error: err.message
+    });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { FullName, Email, Subject, Message } = req.body;
 
     if (!FullName || !Email || !Message) {
       return res.status(400).json({
-        message: "Full name, email and message are required"
+        message: "Full name, email and message are required."
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(Email)) {
+      return res.status(400).json({
+        message: "Please enter a valid email address."
       });
     }
 
@@ -22,14 +54,14 @@ router.post("/", async (req, res) => {
       .input("Subject", sql.NVarChar, Subject || "")
       .input("Message", sql.NVarChar, Message)
       .query(`
-        INSERT INTO ContactMessages
+        INSERT INTO dbo.ContactMessages
         (FullName, Email, Subject, Message)
         VALUES
         (@FullName, @Email, @Subject, @Message)
       `);
 
     res.status(201).json({
-      message: "Contact message sent successfully"
+      message: "Your message was sent successfully."
     });
   } catch (err) {
     res.status(500).json({
@@ -39,20 +71,25 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+// DELETE contact message by id
+router.delete("/:id", async (req, res) => {
   try {
     const pool = await poolPromise;
 
-    const result = await pool.request().query(`
-      SELECT *
-      FROM ContactMessages
-      ORDER BY CreatedAt DESC
-    `);
+    const result = await pool
+      .request()
+      .input("Id", sql.Int, req.params.id)
+      .query(`
+        DELETE FROM dbo.ContactMessages
+        WHERE Id = @Id
+      `);
 
-    res.json(result.recordset);
+    res.json({
+      message: "Contact message deleted successfully."
+    });
   } catch (err) {
     res.status(500).json({
-      message: "Error fetching contact messages",
+      message: "Error deleting contact message",
       error: err.message
     });
   }

@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { sql, poolPromise } = require("../db");
 
-// GET all seat reservations for admin
 router.get("/", async (req, res) => {
   try {
     const pool = await poolPromise;

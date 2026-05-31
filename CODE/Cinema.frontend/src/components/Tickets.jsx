@@ -6,7 +6,9 @@ function Tickets() {
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showSeatModal, setShowSeatModal] = useState(false);
 
-  const [selectedScreeningId, setSelectedScreeningId] = useState("");
+  const [selectedMovieId, setSelectedMovieId] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [selectedScreening, setSelectedScreening] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -16,6 +18,24 @@ function Tickets() {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
+
+  const availableTimes = ["16:00", "19:30", "21:00"];
+
+  function formatDateForInput(date) {
+    return date.toISOString().split("T")[0];
+  }
+
+  function normalizeDate(dateValue) {
+    if (!dateValue) return "";
+    return new Date(dateValue).toISOString().split("T")[0];
+  }
+
+  const today = new Date();
+  const maxDate = new Date();
+  maxDate.setDate(today.getDate() + 7);
+
+  const minDateValue = formatDateForInput(today);
+  const maxDateValue = formatDateForInput(maxDate);
 
   useEffect(() => {
     async function loadScreenings() {
@@ -36,6 +56,21 @@ function Tickets() {
     loadScreenings();
   }, []);
 
+  const uniqueMovies = screenings.reduce((movies, screening) => {
+    const alreadyExists = movies.some(
+      (movie) => String(movie.MovieId) === String(screening.MovieId)
+    );
+
+    if (!alreadyExists && screening.Status !== "Coming Soon") {
+      movies.push({
+        MovieId: screening.MovieId,
+        MovieTitle: screening.MovieTitle
+      });
+    }
+
+    return movies;
+  }, []);
+
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -43,45 +78,79 @@ function Tickets() {
       ...formData,
       [name]: value
     });
+
+    setErrorMessage("");
   }
 
-  function handleScreeningChange(event) {
-    const screeningId = event.target.value;
-    setSelectedScreeningId(screeningId);
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-    const screening = screenings.find(
-      (item) => String(item.Id) === String(screeningId)
-    );
-
-    setSelectedScreening(screening || null);
+  function isValidPhone(phone) {
+    if (!phone) return true;
+    return /^[0-9+\s()-]{7,15}$/.test(phone);
   }
 
   function handleContinue(event) {
     event.preventDefault();
 
-    if (!selectedScreening) {
-      setErrorMessage("Please select a movie screening.");
+    if (!selectedMovieId) {
+      setErrorMessage("Please select a movie.");
       return;
     }
 
-    if (!formData.ClientName || !formData.Email) {
-      setErrorMessage("Please complete your name and email.");
+    if (!selectedDate) {
+      setErrorMessage("Please select a date from the calendar.");
       return;
     }
 
-    if (selectedScreening.Status === "Coming Soon") {
-      setErrorMessage("Tickets are not available yet for this movie.");
+    if (!selectedTime) {
+      setErrorMessage("Please select a screening time.");
       return;
     }
 
+    if (formData.ClientName.trim().length < 2) {
+      setErrorMessage("Please enter a valid full name.");
+      return;
+    }
+
+    if (!isValidEmail(formData.Email)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
+    if (!isValidPhone(formData.Phone)) {
+      setErrorMessage("Please enter a valid phone number.");
+      return;
+    }
+
+    const screening = screenings.find((item) => {
+      const itemDate = normalizeDate(item.ScreeningDate);
+
+      return (
+        String(item.MovieId) === String(selectedMovieId) &&
+        itemDate === selectedDate &&
+        item.ScreeningTime === selectedTime &&
+        item.Status !== "Coming Soon"
+      );
+    });
+
+    if (!screening) {
+      setErrorMessage(
+        "This movie is not available for the selected date and time. Please choose another option."
+      );
+      return;
+    }
+
+    setSelectedScreening(screening);
     setErrorMessage("");
     setShowBookingForm(false);
     setShowSeatModal(true);
   }
 
-  function formatDate(dateValue) {
-    if (!dateValue) return "TBA";
-    return new Date(dateValue).toLocaleDateString("en-GB");
+  function handleCloseForm() {
+    setShowBookingForm(false);
+    setErrorMessage("");
   }
 
   return (
@@ -90,20 +159,12 @@ function Tickets() {
         <span>Ticket booking</span>
         <h2>Reserve your cinema seat</h2>
         <p>
-          Choose a movie, complete your details and select the exact seats you
-          want from the cinema hall map.
+          Choose a movie, select a date and time, then pick your exact seat from
+          the cinema hall map.
         </p>
       </div>
 
-      <div className="ticket-panel highlight-panel ticket-action-card">
-  <button
-    className="red-action-btn big-book-btn"
-    onClick={() => setShowBookingForm(true)}
-       >
-     Book Now
-     </button>
-    </div>
-
+      <div className="tickets-layout">
         <div className="ticket-panel cinema-preview-panel">
           <img
             src="/images/cinema-hall.jpg"
@@ -115,12 +176,23 @@ function Tickets() {
           />
         </div>
 
-        <div className="ticket-panel ticket-message-card">
-       <h3>Select your seat</h3>
+        <div className="ticket-panel highlight-panel ticket-action-card">
+          <button
+            className="red-action-btn big-book-btn"
+            onClick={() => setShowBookingForm(true)}
+          >
+            Book Now
+          </button>
+        </div>
 
-      <p>
-    Choose your preferred seat from the cinema map. Reserved seats are marked in red and cannot be selected again.
-        </p>
+        <div className="ticket-panel ticket-message-card">
+          <h3>Select your seat</h3>
+
+          <p>
+            Choose your preferred seat from the cinema map. Reserved seats are
+            marked in red and cannot be selected again.
+          </p>
+        </div>
       </div>
 
       {showBookingForm && (
@@ -130,20 +202,67 @@ function Tickets() {
 
             <form onSubmit={handleContinue}>
               <select
-                value={selectedScreeningId}
-                onChange={handleScreeningChange}
+                value={selectedMovieId}
+                onChange={(event) => {
+                  setSelectedMovieId(event.target.value);
+                  setSelectedDate("");
+                  setSelectedTime("");
+                  setErrorMessage("");
+                }}
                 required
               >
-                <option value="">Select movie screening</option>
+                <option value="">Select movie</option>
 
-                {screenings.map((screening) => (
-                  <option key={screening.Id} value={screening.Id}>
-                    {screening.MovieTitle} |{" "}
-                    {formatDate(screening.ScreeningDate)} |{" "}
-                    {screening.ScreeningTime} | {screening.HallName}
+                {uniqueMovies.map((movie) => (
+                  <option key={movie.MovieId} value={movie.MovieId}>
+                    {movie.MovieTitle}
                   </option>
                 ))}
               </select>
+
+              <div className="booking-calendar">
+                <p className="booking-field-label">Select date</p>
+
+                <input
+                  type="date"
+                  className="date-calendar-input"
+                  value={selectedDate}
+                  min={minDateValue}
+                  max={maxDateValue}
+                  onClick={(event) => {
+                    if (event.currentTarget.showPicker) {
+                      event.currentTarget.showPicker();
+                    }
+                  }}
+                  onChange={(event) => {
+                    setSelectedDate(event.target.value);
+                    setSelectedTime("");
+                    setErrorMessage("");
+                  }}
+                  required
+                />
+              </div>
+
+              <div className="booking-time">
+                <p className="booking-field-label">Select time</p>
+
+                <div className="time-buttons">
+                  {availableTimes.map((time) => (
+                    <button
+                      key={time}
+                      type="button"
+                      className="time-option"
+                      data-selected={selectedTime === time ? "true" : "false"}
+                      onClick={() => {
+                        setSelectedTime(time);
+                        setErrorMessage("");
+                      }}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <input
                 type="text"
@@ -151,6 +270,7 @@ function Tickets() {
                 placeholder="Full name"
                 value={formData.ClientName}
                 onChange={handleChange}
+                minLength="2"
                 required
               />
 
@@ -164,46 +284,18 @@ function Tickets() {
               />
 
               <input
-                type="text"
+                type="tel"
                 name="Phone"
                 placeholder="Phone number"
                 value={formData.Phone}
                 onChange={handleChange}
               />
 
-              {selectedScreening && (
-                <div className="booking-movie-details">
-                  <p>
-                    <strong>Movie:</strong> {selectedScreening.MovieTitle}
-                  </p>
-                  <p>
-                    <strong>Date:</strong>{" "}
-                    {formatDate(selectedScreening.ScreeningDate)}
-                  </p>
-                  <p>
-                    <strong>Time:</strong> {selectedScreening.ScreeningTime}
-                  </p>
-                  <p>
-                    <strong>Hall:</strong> {selectedScreening.HallName}
-                  </p>
-                  <p>
-                    <strong>Price:</strong> {selectedScreening.BasePrice} RON /
-                    seat
-                  </p>
-                </div>
-              )}
-
               {errorMessage && <p className="error-message">{errorMessage}</p>}
 
               <button type="submit">Continue to seat selection</button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setShowBookingForm(false);
-                  setErrorMessage("");
-                }}
-              >
+              <button type="button" onClick={handleCloseForm}>
                 Cancel
               </button>
             </form>

@@ -584,7 +584,6 @@ body {
 
 /* CONTACT / INFO CARDS */
 
-.tickets-layout,
 .contact-layout,
 .info-grid {
   display: grid;
@@ -598,7 +597,6 @@ body {
   grid-template-columns: repeat(4, 1fr);
 }
 
-.ticket-panel,
 .contact-card,
 .info-card {
   background: #101010;
@@ -608,14 +606,12 @@ body {
   transition: 0.25s ease;
 }
 
-.ticket-panel:hover,
 .info-card:hover,
 .contact-card:hover {
   border-color: rgba(220, 38, 38, 0.55);
   transform: translateY(-4px);
 }
 
-.ticket-panel h3,
 .contact-card h3,
 .info-card h3 {
   margin: 0 0 14px;
@@ -623,7 +619,6 @@ body {
   color: #ffffff;
 }
 
-.ticket-panel p,
 .contact-card p,
 .info-card p {
   color: #cbd5e1;
@@ -775,118 +770,7 @@ td {
   color: #dc2626;
 }
 
-/* RESPONSIVE */
-
-@media (max-width: 1200px) {
-  .info-grid,
-  .contact-layout {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .admin-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 1000px) {
-  .header {
-    padding: 0 28px;
-  }
-
-  .header-nav {
-    display: none;
-  }
-
-  .video-overlay {
-    padding: 50px 30px;
-  }
-
-  .home-video-content h1 {
-    font-size: 42px;
-  }
-
-  .info-section,
-  .movies-section,
-  .admin-section {
-    padding: 70px 30px;
-  }
-
-  .footer {
-    grid-template-columns: 1fr 1fr;
-    padding: 36px 28px;
-  }
-}
-
-@media (max-width: 650px) {
-  .header {
-    height: auto;
-    padding: 18px;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .logo-image {
-    height: 62px;
-  }
-
-  .home-video-section {
-    min-height: 560px;
-  }
-
-  .video-overlay {
-    min-height: 560px;
-    padding: 50px 24px;
-  }
-
-  .home-video-content h1 {
-    font-size: 34px;
-  }
-
-  .home-video-content p {
-    font-size: 16px;
-  }
-
-  .home-actions {
-    flex-direction: column;
-  }
-
-  .info-section,
-  .movies-section,
-  .admin-section {
-    padding: 60px 22px;
-  }
-
-  .section-heading h2,
-  .movies-section h2 {
-    font-size: 34px;
-  }
-
-  .movies-grid,
-  .info-grid,
-  .contact-layout,
-  .admin-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .movie-poster-wrapper {
-    height: 420px;
-  }
-
-  .movie-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .movie-bottom button {
-    width: 100%;
-  }
-
-  .footer {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* FINAL TICKETS 3-CARD LAYOUT */
+/* TICKETS - 3 EQUAL BOXES */
 
 .tickets-section {
   background: #000000;
@@ -894,26 +778,22 @@ td {
 
 .tickets-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 28px;
-  max-width: 1180px;
+  max-width: 1120px;
   margin: 0 auto;
   align-items: stretch;
 }
 
 .ticket-panel {
+  aspect-ratio: 1 / 1;
+  width: 100%;
   background: #101010;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
-  padding: 30px;
-  height: 360px;
-  min-height: 360px;
-  max-height: 360px;
-  transition: 0.25s ease;
+  overflow: hidden;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  transition: 0.25s ease;
 }
 
 .ticket-panel:hover {
@@ -921,46 +801,8 @@ td {
   transform: translateY(-4px);
 }
 
-.ticket-action-card {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.big-book-btn {
-  padding: 18px 34px;
-  font-size: 18px;
-  min-width: 170px;
-}
-
-.ticket-message-card {
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.ticket-message-card h3 {
-  margin: 0 0 14px;
-  font-size: 28px;
-  color: #ffffff;
-}
-
-.ticket-message-card p {
-  margin: 0;
-  color: #cbd5e1;
-  font-size: 16px;
-  line-height: 1.7;
-}
-
-.highlight-panel {
-  border-color: rgba(220, 38, 38, 0.35);
-}
-
 .cinema-preview-panel {
-  height: 360px;
-  min-height: 360px;
-  max-height: 360px;
   padding: 0;
-  overflow: hidden;
 }
 
 .ticket-hall-image {
@@ -971,55 +813,116 @@ td {
   display: block;
 }
 
-.red-action-btn {
-  margin-top: 18px;
-  border: none;
-  background: #dc2626;
-  color: #ffffff;
-  padding: 13px 22px;
-  border-radius: 999px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-
-.red-action-btn:hover {
-  background: #b91c1c;
-  transform: translateY(-2px);
-}
-
-/* SEAT LEGEND */
-
-.seat-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-
-.seat-legend div {
+.ticket-action-card {
   display: flex;
   align-items: center;
-  gap: 11px;
-  color: #d1d5db;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
 }
 
-.legend-seat {
-  width: 21px;
-  height: 21px;
-  border-radius: 7px;
-  display: inline-block;
+.big-book-btn {
+  margin: 0;
+  padding: 18px 38px;
+  font-size: 19px;
+  min-width: 180px;
 }
 
-.legend-seat.available {
-  background: #e5e7eb;
+.ticket-message-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 34px;
 }
 
-.legend-seat.selected {
-  background: #22c55e;
+.ticket-message-card h3 {
+  margin: 0 0 16px;
+  color: #ffffff;
+  font-size: 30px;
+  line-height: 1.15;
 }
 
-.legend-seat.reserved {
-  background: #dc2626;
+.ticket-message-card p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* BOOKING DATE CALENDAR */
+
+.booking-field-label {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.booking-calendar,
+.booking-time {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-calendar-input {
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1px solid #333333;
+  background: #050505;
+  color: #ffffff;
+  font-size: 15px;
+  cursor: pointer;
+  color-scheme: dark;
+}
+
+.date-calendar-input:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
+}
+
+.date-calendar-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1);
+}
+
+/* TIME BUTTONS - SELECTED STAYS RED */
+
+.booking-modal .time-buttons {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+}
+
+.booking-modal .time-buttons .time-option {
+  background: #050505 !important;
+  color: #ffffff !important;
+  border: 1px solid #333333 !important;
+  border-radius: 999px !important;
+  padding: 14px 10px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  transition: 0.2s ease !important;
+}
+
+.booking-modal .time-buttons .time-option:hover {
+  border-color: #dc2626 !important;
+  background: rgba(220, 38, 38, 0.14) !important;
+}
+
+.booking-modal .time-buttons .time-option[data-selected="true"] {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 18px rgba(220, 38, 38, 0.55) !important;
+}
+
+.booking-modal .time-buttons .time-option[data-selected="true"]:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+  border-color: #dc2626 !important;
 }
 
 /* SEAT SELECTION MODAL */
@@ -1174,26 +1077,159 @@ td {
   background: #b91c1c;
 }
 
-/* RESPONSIVE TICKETS */
+/* SEAT LEGEND */
+
+.seat-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.seat-legend div {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #d1d5db;
+}
+
+.legend-seat {
+  width: 21px;
+  height: 21px;
+  border-radius: 7px;
+  display: inline-block;
+}
+
+.legend-seat.available {
+  background: #e5e7eb;
+}
+
+.legend-seat.selected {
+  background: #22c55e;
+}
+
+.legend-seat.reserved {
+  background: #dc2626;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+  .info-grid,
+  .contact-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media (max-width: 1000px) {
+  .header {
+    padding: 0 28px;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .video-overlay {
+    padding: 50px 30px;
+  }
+
+  .home-video-content h1 {
+    font-size: 42px;
+  }
+
+  .info-section,
+  .movies-section,
+  .admin-section {
+    padding: 70px 30px;
+  }
+
   .tickets-layout {
     grid-template-columns: 1fr;
+    max-width: 420px;
   }
 
-  .ticket-panel,
-  .cinema-preview-panel {
-    height: auto;
-    min-height: 300px;
-    max-height: none;
+  .ticket-panel {
+    aspect-ratio: 1 / 1;
   }
 
-  .ticket-hall-image {
-    min-height: 300px;
+  .footer {
+    grid-template-columns: 1fr 1fr;
+    padding: 36px 28px;
   }
 }
 
 @media (max-width: 650px) {
+  .header {
+    height: auto;
+    padding: 18px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .logo-image {
+    height: 62px;
+  }
+
+  .home-video-section {
+    min-height: 560px;
+  }
+
+  .video-overlay {
+    min-height: 560px;
+    padding: 50px 24px;
+  }
+
+  .home-video-content h1 {
+    font-size: 34px;
+  }
+
+  .home-video-content p {
+    font-size: 16px;
+  }
+
+  .home-actions {
+    flex-direction: column;
+  }
+
+  .info-section,
+  .movies-section,
+  .admin-section {
+    padding: 60px 22px;
+  }
+
+  .section-heading h2,
+  .movies-section h2 {
+    font-size: 34px;
+  }
+
+  .movies-grid,
+  .info-grid,
+  .contact-layout,
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-poster-wrapper {
+    height: 420px;
+  }
+
+  .movie-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .movie-bottom button {
+    width: 100%;
+  }
+
+  .footer {
+    grid-template-columns: 1fr;
+  }
+
   .seat-selection-modal {
     padding: 26px 18px;
   }
@@ -1214,5 +1250,165 @@ td {
 
   .screen-area {
     width: 95%;
+  }
+}
+
+/* CONTACT SUCCESS MESSAGE WHITE */
+
+.contact-form .success-message {
+  color: #ffffff !important;
+}
+
+/* ADMIN DASHBOARD TABS - CINEMA STYLE */
+
+.admin-tabs {
+  max-width: 1180px;
+  margin: 0 auto 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 12px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.admin-tabs .admin-tab {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: #050505 !important;
+  color: #ffffff !important;
+  padding: 13px 24px !important;
+  border-radius: 999px !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  transition: 0.25s ease !important;
+  letter-spacing: 0.2px;
+  appearance: none;
+}
+
+.admin-tabs .admin-tab:hover {
+  border-color: rgba(220, 38, 38, 0.65) !important;
+  background: rgba(220, 38, 38, 0.15) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.admin-tabs .admin-tab.active {
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(220, 38, 38, 0.45);
+}
+
+.admin-tabs .admin-tab.active:hover {
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+/* ADMIN DELETE BUTTON */
+
+.admin-delete-btn {
+  border: none;
+  background: #dc2626;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-delete-btn:hover {
+  background: #b91c1c;
+}
+
+/* BOOKING CONFIRMATION */
+
+.booking-confirmation-card {
+  margin-top: 10px;
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  border-radius: 18px;
+  padding: 24px;
+  text-align: center;
+}
+
+.booking-confirmation-card h3 {
+  margin: 0 0 14px;
+  color: #ffffff;
+  font-size: 28px;
+}
+
+.booking-confirmation-card p {
+  margin: 8px 0;
+  color: #ffffff;
+}
+
+.booking-confirmation-card strong {
+  color: #ffffff;
+}
+
+.booking-confirmation-details {
+  margin: 18px 0;
+  background: #050505;
+  border: 1px solid #222222;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+/* ADMIN ADD MOVIE FORM */
+
+.admin-movie-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.admin-movie-form input,
+.admin-movie-form select,
+.admin-movie-form textarea {
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1px solid #333333;
+  background: #050505;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.admin-movie-form textarea {
+  grid-column: span 2;
+  min-height: 110px;
+  resize: vertical;
+}
+
+.admin-movie-form input:focus,
+.admin-movie-form select:focus,
+.admin-movie-form textarea:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
+}
+
+.admin-movie-form .error-message,
+.admin-movie-form .success-message,
+.admin-movie-form button {
+  grid-column: span 2;
+}
+
+@media (max-width: 650px) {
+  .admin-movie-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-movie-form textarea,
+  .admin-movie-form .error-message,
+  .admin-movie-form .success-message,
+  .admin-movie-form button {
+    grid-column: span 1;
   }
 }
